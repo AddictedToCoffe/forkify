@@ -208,6 +208,10 @@ const controlDeleteAllMeals = function () {
   calendarView.render(model.state.meals);
 };
 
+const newFeature = function () {
+  console.log('Welcome to the application');
+};
+
 const init = function () {
   bookmarksView.addHandlerRender(controlBookmarks);
   bookmarksView.addHandlerDeleteAllBookmarks(controlDeleteAllBookmarks);
@@ -226,5 +230,6 @@ const init = function () {
   previewView.addHandlerSort(controlSorting);
   shoppingListView.addHandlerClearShoppingList(controlClearingShoppingList);
   shoppingListView.addHandlerDeleteIngredient(controlDeleteIngFromShoppingList);
+  newFeature();
 };
 init();
