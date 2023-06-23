@@ -226,5 +226,6 @@ const init = function () {
   previewView.addHandlerSort(controlSorting);
   shoppingListView.addHandlerClearShoppingList(controlClearingShoppingList);
   shoppingListView.addHandlerDeleteIngredient(controlDeleteIngFromShoppingList);
+  console.log('Hello');
 };
 init();
