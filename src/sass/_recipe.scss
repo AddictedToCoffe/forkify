@@ -156,6 +156,10 @@
     flex: 0 0 auto;
   }
 
+  &__calories {
+    // font-weight: 700;
+    color: $color-grad-2;
+  }
   ///////////
   // DIRECTIONS
   &__directions {
@@ -176,4 +180,9 @@
   &__publisher {
     font-weight: 700;
   }
+}
+
+.calories {
+  color: $color-grad-2;
+  text-align: center;
 }

@@ -34,10 +34,13 @@ const controlRecipies = async function () {
     //1 Loading recipe
     await model.loadRecipe(id); //await bo promise i async funcrtion - czekamy na wynik
 
-    //2 Rendering recipe
+    //2 Downloading calories
+    await model.getCalories(model.state.recipe);
 
+    //3 Rendering recipe
     recipeView.render(model.state.recipe);
     // constrolServings();
+    // console.log(model.state.recipe);
   } catch (err) {
     console.error(err);
     recipeView.renderError(`💥 ${err} 💥`);
@@ -226,6 +229,6 @@ const init = function () {
   previewView.addHandlerSort(controlSorting);
   shoppingListView.addHandlerClearShoppingList(controlClearingShoppingList);
   shoppingListView.addHandlerDeleteIngredient(controlDeleteIngFromShoppingList);
-  console.log('Hello');
+  // console.log('Hello');
 };
 init();

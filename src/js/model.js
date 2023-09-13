@@ -86,6 +86,15 @@ export const updateServings = function (newServings) {
   state.recipe.ingredients.forEach(
     ing => (ing.quantity = (ing.quantity * newServings) / state.recipe.servings)
   );
+
+  state.recipe.calories = state.recipe.calories.map(
+    cal => (cal * newServings) / state.recipe.servings
+  );
+
+  state.recipe.totalCalories =
+    (state.recipe.totalCalories * newServings) / state.recipe.servings;
+
+  console.log(state.recipe.calories);
   state.recipe.servings = newServings;
 };
 
@@ -285,24 +294,47 @@ export const clearMealsFromCalendar = function () {
   localStorage.removeItem('meals');
 };
 
-const getCalories = async function () {
+export const getCalories = async function (recipe) {
   try {
-    // const title = 'jajo';
-    // const ingr = '1 egg';
-    const food = { title: 'egg', unit: 'g', value: 100 };
-    const key = 'db254b5cd61744d39a2deebd9c361444';
-    const data = await AJAX(
-      `https://api.spoonacular.com/recipes/guessNutrition?apiKey=${key}&title=${food}`
+    console.log(recipe);
+    const ingredients = recipe.ingredients.map(ing =>
+      [ing.quantity, ing.unit, ing.description].join(' ')
     );
+    console.log(ingredients);
 
+    const uploadData = {
+      title: recipe.title,
+      ingredients: ingredients,
+      servings: 1,
+    };
+
+    console.log(uploadData);
+
+    const data = await AJAX(
+      `https://api.spoonacular.com/recipes/analyze?includeNutrition=true&apiKey=db254b5cd61744d39a2deebd9c361444`,
+      uploadData
+    );
+    //db254b5cd61744d39a2deebd9c361444
+    //f45945aabcb444e790b29400a4557029
     console.log(data);
-    // if (!res.ok) throw new Error(`${data.message} ${res.status}`);
+
+    const calories = data.nutrition.ingredients.map((ing, i) => {
+      const index = ing.nutrients.findIndex(nut => nut.name === 'Calories');
+      return ing.nutrients.at(index).amount;
+    });
+
+    console.log(calories);
+
+    state.recipe.calories = calories;
+    state.recipe.totalCalories = calories.reduce((a, b) => a + b, 0).toFixed();
   } catch (err) {
     //Temp error handling
     console.error(`💥 ${err} 💥`);
     throw err;
   }
 };
+
+// getCalories();
 // getCalories();
 
 //czy jak kopiujemy property a nie caly obiekt to tez jest jakies polaczenie ? NIE

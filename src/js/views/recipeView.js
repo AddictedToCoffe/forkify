@@ -133,7 +133,15 @@ class RecipeView extends View {
       <div class="recipe__ingredients">
       <h2 class="heading--2">Recipe ingredients</h2>
       <ul class="recipe__ingredient-list">
-      ${this._data.ingredients.map(this._generateMarkupIngredient).join('')}
+      ${this._data.ingredients
+        .map((ing, i) => this._generateMarkupIngredient(ing, i))
+        .join('')}
+
+      <h4 class="calories">
+     ${(
+       this._data.totalCalories / this._data.servings
+     ).toFixed()} kcal/1 serving  ${this._data.totalCalories} kcal/Total
+      </h4>
       </div>
 
       <div class="recipe__directions">
@@ -159,7 +167,7 @@ class RecipeView extends View {
     `;
   }
 
-  _generateMarkupIngredient(ing) {
+  _generateMarkupIngredient(ing, i) {
     return `
 <li class="recipe__ingredient">
 <svg class="recipe__icon">
@@ -170,7 +178,8 @@ class RecipeView extends View {
     }</div>
 <div class="recipe__description">
   <span class="recipe__unit">${ing.unit}</span>
-  ${ing.description}
+  ${ing.description} 
+  <span class="recipe__calories">${this._data.calories[i].toFixed()} kcal</span>
 </div>
 </li>
 `;
