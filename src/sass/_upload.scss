@@ -170,13 +170,14 @@
   grid-template-columns: 175px 25px 25px;
   gap: 5px;
   width: 250px;
-  padding-top: 20px;
+  margin-top: 20px;
+  align-items: center;
 
   & span {
     border: 2px solid $color-primary;
     background-color: $color-grey-light-1;
     border-radius: 2rem;
-    height: 25px;
+    // height: 25px;
     font-size: 1.4rem;
     font-weight: 900;
     text-align: center;
