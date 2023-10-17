@@ -11,6 +11,8 @@ class AddRecipeView extends View {
   _btnRemoveIng = document.getElementsByClassName('remove__ing');
   _ingredients = document.getElementsByClassName('ingredients');
   _allIngredients = document.getElementsByClassName('ingredient');
+  _imageUrl = document.getElementsByClassName('image_url');
+  _recipeUrl = document.getElementsByClassName('recipe_url');
   _activeIngredients = 6;
   _message = 'Recipe was succesfully uploaded !';
 
@@ -86,7 +88,7 @@ class AddRecipeView extends View {
     const checkUnits = ingUnits.filter(
       units => !ingQuantities.some(quantity => quantity.includes(units))
     );
-    console.log(checkUnits);
+    // console.log(checkUnits);
 
     if (checkUnits.length !== 0) {
       checkUnits.forEach(unit => {
@@ -101,6 +103,59 @@ class AddRecipeView extends View {
       });
 
       return;
+    }
+
+    const recipeUrlInput = this._recipeUrl[0].value;
+    const imageUrlInput = this._imageUrl[0].value;
+    // console.log(recipeUrlInput);
+    // console.log(imageUrlInput);
+
+    if (
+      !recipeUrlInput.startsWith('https://') &&
+      !recipeUrlInput.startsWith('http://')
+    ) {
+      this._recipeUrl[0].setCustomValidity('Not correct URL format');
+      this._recipeUrl[0].reportValidity();
+      this._recipeUrl[0].addEventListener('input', function () {
+        this.setCustomValidity('');
+      });
+      return;
+    }
+
+    if (
+      !imageUrlInput.startsWith('https://') &&
+      !imageUrlInput.startsWith('http://')
+    ) {
+      this._imageUrl[0].setCustomValidity('Not correct URL format');
+      this._imageUrl[0].reportValidity();
+      this._imageUrl[0].addEventListener('input', function () {
+        this.setCustomValidity('');
+      });
+      return;
+    }
+
+    if (
+      imageUrlInput.startsWith('https://') ||
+      imageUrlInput.startsWith('http://')
+    ) {
+      //prettier-ignore
+      const imageFormats = ['DXF', 'DWF', 'DWG', 'AI', 'CDR', 'EPS', 'SVG', 'SWF', 'WMF', 'PDF', 'STL', 'JPEG', 'BMP', 'GIF', 'PNG', 'PSD', 'TIFF', 'RAW', 'HEIF', 'JPG', 'JPE', 'JIF', 'JFI', 'JFIF', '3FR', 'DNG', 'DATA', 'ARW', 'SR2', 'HEIF',
+      ];
+
+      const isImgValidate = imageFormats.some(format =>
+        imageUrlInput.toLowerCase().endsWith(format.toLowerCase())
+      );
+      // console.log(isImgValidate);
+      if (!isImgValidate) {
+        this._imageUrl[0].setCustomValidity(
+          'Url does not contain an image format'
+        );
+        this._imageUrl[0].reportValidity();
+        this._imageUrl[0].addEventListener('input', function () {
+          this.setCustomValidity('');
+        });
+        return;
+      }
     }
 
     return 'validationOk';
@@ -178,173 +233,201 @@ class AddRecipeView extends View {
     return `<div class="upload__column">
           <h3 class="upload__heading">Recipe data</h3>
           <label>Title</label>
-          <input value="TEST23" required name="title" type="text" />
+          <input
+            placeholder="Recipe title..."
+            required
+            name="title"
+            type="text"
+            minlength="3"
+          />
           <label>URL</label>
-          <input value="TEST23" required name="sourceUrl" type="text" />
+          <input
+            placeholder="Recipe page URL..."
+            required
+            name="sourceUrl"
+            type="url"
+            class="recipe_url"
+          />
           <label>Image URL</label>
-          <input value="TEST23" required name="image" type="text" />
+          <input placeholder="Image URL..." required name="image" type="url" class="image_url" />
           <label>Publisher</label>
-          <input value="TEST23" required name="publisher" type="text" />
-          <label>Prep time</label>
-          <input value="23" required name="cookingTime" type="number" />
+          <input
+            placeholder="Publisher..."
+            required
+            name="publisher"
+            type="text"
+            minlength="4"
+          />
+          <label>Preparation time (minutes)</label>
+          <input
+            placeholder="Preparation time..."
+            required
+            name="cookingTime"
+            type="number"
+          />
           <label>Servings</label>
-          <input value="23" required name="servings" type="number" />
+          <input
+            placeholder="How many servings..."
+            required
+            name="servings"
+            type="number"
+          />
         </div>
 
         <div class="upload__column2">
         <h3 class="upload__heading">Ingredients</h3>
         <div class="ingredients">
-          <div class="ingredient ingredient-1">
-            <label>Ingredient 1</label>
-            <input
-                value=""
-                min="0.1"
-                step="0.1"
-                type="number"
-                name="ingredient-1-quantity"
-                placeholder="Quantity"
-              />
-              <input
-                value="kg"
-                type="text"
-                pattern="[a-zA-Z ]*"
-                name="ingredient-1-unit"
-                placeholder="Unit"
-              />
-              <input
-                value="Rice"
-                type="text"
-                pattern="[a-zA-Z %,.]*"
-                required
-                name="ingredient-1-description"
-                placeholder="Description"
-              />
-            </div>
-            <div class="ingredient ingredient-2">
-              <label>Ingredient 2</label>
-              <input
-                value=""
-                min="0.1"
-                step="0.1"
-                type="number"
-                name="ingredient-2-quantity"
-                placeholder="Quantity"
-              />
-              <input
-                value="kg"
-                type="text"
-                pattern="[a-zA-Z ]*"
-                name="ingredient-2-unit"
-                placeholder="Unit"
-              />
-              <input
-                value="Rice"
-                type="text"
-                pattern="[a-zA-Z %,.]*"
-                name="ingredient-2-description"
-                placeholder="Description"
-              />
-            </div>
-            <div class="ingredient ingredient-3">
-              <label>Ingredient 3</label>
-              <input
-                value=""
-                type="number"
-                min="0.1"
-                step="0.1"
-                name="ingredient-3-quantity"
-                placeholder="Quantity"
-              />
-              <input
-                value="kg"
-                type="text"
-                pattern="[a-zA-Z ]*"
-                name="ingredient-3-unit"
-                placeholder="Unit"
-              />
-              <input
-                value="Rice"
-                type="text"
-                pattern="[a-zA-Z %,.]*"
-                name="ingredient-3-description"
-                placeholder="Description"
-              />
-            </div>
-            <div class="ingredient ingredient-4">
-              <label>Ingredient 4</label>
-              <input
-                value=""
-                type="number"
-                min="0.1"
-                step="0.1"
-                name="ingredient-4-quantity"
-                placeholder="Quantity"
-              />
-              <input
-                value=""
-                type="text"
-                pattern="[a-zA-Z ]*"
-                name="ingredient-4-unit"
-                placeholder="Unit"
-              />
-              <input
-                value=""
-                type="text"
-                pattern="[a-zA-Z %,.]*"
-                name="ingredient-4-description"
-                placeholder="Description"
-              />
-            </div>
-            <div class="ingredient ingredient-5">
-              <label>Ingredient 5</label>
-              <input
-                value=""
-                type="number"
-                min="0.1"
-                step="0.1"
-                name="ingredient-5-quantity"
-                placeholder="Quantity"
-              />
-              <input
-                value=""
-                type="text"
-                pattern="[a-zA-Z ]*"
-                name="ingredient-5-unit"
-                placeholder="Unit"
-              />
-              <input
-                value=""
-                type="text"
-                pattern="[a-zA-Z %,.]*"
-                name="ingredient-5-description"
-                placeholder="Description"
-              />
-            </div>
-            <div class="ingredient ingredient-6">
-              <label>Ingredient 6</label>
-              <input
-                value=""
-                type="number"
-                min="0.1"
-                step="0.1"
-                name="ingredient-6-quantity"
-                placeholder="Quantity"
-              />
-              <input
-                value=""
-                type="text"
-                pattern="[a-zA-Z ]*"
-                name="ingredient-6-unit"
-                placeholder="Unit"
-              />
-              <input
-                value=""
-                type="text"
-                pattern="[a-zA-Z %,.]*"
-                name="ingredient-6-description"
-                placeholder="Description"
-              />
-          </div>
+        <div class="ingredient ingredient-1">
+        <label>Ingredient 1</label>
+        <input
+          value=""
+          min="0.1"
+          step="0.1"
+          type="number"
+          name="ingredient-1-quantity"
+          placeholder="Quantity"
+        />
+        <input
+          value=""
+          type="text"
+          pattern="[a-zA-Z ]*"
+          name="ingredient-1-unit"
+          placeholder="Unit"
+        />
+        <input
+          value=""
+          type="text"
+          pattern="[a-zA-Z %,.]*"
+          required
+          name="ingredient-1-description"
+          placeholder="Description"
+        />
+      </div>
+      <div class="ingredient ingredient-2">
+        <label>Ingredient 2</label>
+        <input
+          value=""
+          min="0.1"
+          step="0.1"
+          type="number"
+          name="ingredient-2-quantity"
+          placeholder="Quantity"
+        />
+        <input
+          value=""
+          type="text"
+          pattern="[a-zA-Z ]*"
+          name="ingredient-2-unit"
+          placeholder="Unit"
+        />
+        <input
+          value=""
+          type="text"
+          pattern="[a-zA-Z %,.]*"
+          name="ingredient-2-description"
+          placeholder="Description"
+        />
+      </div>
+      <div class="ingredient ingredient-3">
+        <label>Ingredient 3</label>
+        <input
+          value=""
+          type="number"
+          min="0.1"
+          step="0.1"
+          name="ingredient-3-quantity"
+          placeholder="Quantity"
+        />
+        <input
+          value=""
+          type="text"
+          pattern="[a-zA-Z ]*"
+          name="ingredient-3-unit"
+          placeholder="Unit"
+        />
+        <input
+          value=""
+          type="text"
+          pattern="[a-zA-Z %,.]*"
+          name="ingredient-3-description"
+          placeholder="Description"
+        />
+      </div>
+      <div class="ingredient ingredient-4">
+        <label>Ingredient 4</label>
+        <input
+          value=""
+          type="number"
+          min="0.1"
+          step="0.1"
+          name="ingredient-4-quantity"
+          placeholder="Quantity"
+        />
+        <input
+          value=""
+          type="text"
+          pattern="[a-zA-Z ]*"
+          name="ingredient-4-unit"
+          placeholder="Unit"
+        />
+        <input
+          value=""
+          type="text"
+          pattern="[a-zA-Z %,.]*"
+          name="ingredient-4-description"
+          placeholder="Description"
+        />
+      </div>
+      <div class="ingredient ingredient-5">
+        <label>Ingredient 5</label>
+        <input
+          value=""
+          type="number"
+          min="0.1"
+          step="0.1"
+          name="ingredient-5-quantity"
+          placeholder="Quantity"
+        />
+        <input
+          value=""
+          type="text"
+          pattern="[a-zA-Z ]*"
+          name="ingredient-5-unit"
+          placeholder="Unit"
+        />
+        <input
+          value=""
+          type="text"
+          pattern="[a-zA-Z %,.]*"
+          name="ingredient-5-description"
+          placeholder="Description"
+        />
+      </div>
+      <div class="ingredient ingredient-6">
+        <label>Ingredient 6</label>
+        <input
+          value=""
+          type="number"
+          min="0.1"
+          step="0.1"
+          name="ingredient-6-quantity"
+          placeholder="Quantity"
+        />
+        <input
+          value=""
+          type="text"
+          pattern="[a-zA-Z ]*"
+          name="ingredient-6-unit"
+          placeholder="Unit"
+        />
+        <input
+          value=""
+          type="text"
+          pattern="[a-zA-Z %,.]*"
+          name="ingredient-6-description"
+          placeholder="Description"
+        />
+      </div>
         </div>
 
         <div class="more__ingredients">

@@ -17,8 +17,8 @@ class RecipeView extends View {
   //   this.bindFunction =
   // }
 
-  addHandlerRender(hanlder) {
-    ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, hanlder));
+  addHandlerRender(handler) {
+    ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
   }
 
   addHandlerUpdateServings(handler) {
@@ -41,6 +41,14 @@ class RecipeView extends View {
   addHandlerAddIngToShoppingList(handler) {
     this._parentElement.addEventListener('click', function (e) {
       const btn = e.target.closest('.btn--shopping');
+      if (!btn) return;
+      handler();
+    });
+  }
+
+  addHandlerDeleteUploadedRecipe(handler) {
+    this._parentElement.addEventListener('click', function (e) {
+      const btn = e.target.closest('.btn--delete_recipe');
       if (!btn) return;
       handler();
     });
@@ -128,6 +136,12 @@ class RecipeView extends View {
       </svg>
       </button>
 
+      <button class="btn--round btn--delete_recipe ${
+        this._data.key ? '' : 'hidden'
+      }" >
+      <span class="del-icon">❌</span>
+      </button>
+
       </div>
 
       <div class="recipe__ingredients">
@@ -179,7 +193,9 @@ class RecipeView extends View {
 <div class="recipe__description">
   <span class="recipe__unit">${ing.unit}</span>
   ${ing.description} 
-  <span class="recipe__calories">${this._data.calories[i].toFixed()} kcal</span>
+  <span class="recipe__calories">${
+    this._data.calories?.at(i) ? this._data.calories[i].toFixed() : ''
+  } ${this._data.calories?.at(i) ? 'kcal' : ''}</span>
 </div>
 </li>
 `;

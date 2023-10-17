@@ -244,7 +244,7 @@
           </button> -->
         </div>
 
-        <p class="copyright">
+        <!-- <p class="copyright">
           &copy; Copyright by
           <a
             class="twitter-link"
@@ -253,7 +253,7 @@
             >Jonas Schmedtmann</a
           >. Use for learning or your portfolio. Don't use to teach. Don't claim
           as your own.
-        </p>
+        </p> -->
       </div>
 
       <div class="recipe">
@@ -386,17 +386,51 @@
         <div class="upload__column">
           <h3 class="upload__heading">Recipe data</h3>
           <label>Title</label>
-          <input value="TEST23" required name="title" type="text" />
+          <input
+            placeholder="Recipe title..."
+            required
+            name="title"
+            type="text"
+            minlength="3"
+          />
           <label>URL</label>
-          <input value="TEST23" required name="sourceUrl" type="text" />
+          <input
+            placeholder="Recipe page URL..."
+            required
+            name="sourceUrl"
+            type="url"
+            class="recipe_url"
+          />
           <label>Image URL</label>
-          <input value="TEST23" required name="image" type="text" />
+          <input
+            class="image_url"
+            placeholder="Image URL..."
+            required
+            name="image"
+            type="url"
+          />
           <label>Publisher</label>
-          <input value="TEST23" required name="publisher" type="text" />
-          <label>Prep time</label>
-          <input value="23" required name="cookingTime" type="number" />
+          <input
+            placeholder="Publisher..."
+            required
+            name="publisher"
+            type="text"
+            minlength="4"
+          />
+          <label>Preparation time (minutes)</label>
+          <input
+            placeholder="Preparation time..."
+            required
+            name="cookingTime"
+            type="number"
+          />
           <label>Servings</label>
-          <input value="23" required name="servings" type="number" />
+          <input
+            placeholder="How many servings..."
+            required
+            name="servings"
+            type="number"
+          />
         </div>
 
         <div class="upload__column2">
@@ -413,14 +447,14 @@
                 placeholder="Quantity"
               />
               <input
-                value="kg"
+                value=""
                 type="text"
                 pattern="[a-zA-Z ]*"
                 name="ingredient-1-unit"
                 placeholder="Unit"
               />
               <input
-                value="Rice"
+                value=""
                 type="text"
                 pattern="[a-zA-Z %,.]*"
                 required
@@ -439,14 +473,14 @@
                 placeholder="Quantity"
               />
               <input
-                value="kg"
+                value=""
                 type="text"
                 pattern="[a-zA-Z ]*"
                 name="ingredient-2-unit"
                 placeholder="Unit"
               />
               <input
-                value="Rice"
+                value=""
                 type="text"
                 pattern="[a-zA-Z %,.]*"
                 name="ingredient-2-description"
@@ -464,14 +498,14 @@
                 placeholder="Quantity"
               />
               <input
-                value="kg"
+                value=""
                 type="text"
                 pattern="[a-zA-Z ]*"
                 name="ingredient-3-unit"
                 placeholder="Unit"
               />
               <input
-                value="Rice"
+                value=""
                 type="text"
                 pattern="[a-zA-Z %,.]*"
                 name="ingredient-3-description"

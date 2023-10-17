@@ -12,6 +12,7 @@ class CalendarView extends View {
   _calendarButton = document.querySelector('.nav__btn--calendar');
   _overlay = document.querySelector('.overlay');
   _deleteAll = document.querySelector('.clear-meals');
+  _days = this._daysTag.getElementsByTagName('li');
   _message = '';
   _errorMessage =
     'No planned meals on this day. Find nice recipe and add to chosen day';
@@ -29,6 +30,7 @@ class CalendarView extends View {
     this._renderCalendar();
     this._addButtonsHandler();
     this._addHandlerCloseCalender();
+    this._addClickedDayHandler();
   }
 
   // addHandlerRender(handler) {
@@ -47,7 +49,7 @@ class CalendarView extends View {
       this._currYear,
       this._currMonth + 1,
       0
-    ).getDate(); //ostatni dzien biezacego miesiaca
+    ).getDate(); //ostatni dzien biezacego miesiaca,0
 
     const lastDayOfMonth = new Date(
       this._currYear,
@@ -114,6 +116,16 @@ class CalendarView extends View {
         this.renderMessage('Choose day');
       })
     );
+  }
+
+  _addClickedDayHandler() {
+    this._daysTag.addEventListener('click', e => {
+      if (e.target.classList.contains('inactive') || !e.target.closest('li'))
+        return;
+      [...this._days].forEach(el => el.classList.remove('clicked'));
+      const clickedDay = e.target.closest('li');
+      clickedDay.classList.add('clicked');
+    });
   }
 
   _closeCalender() {

@@ -136,8 +136,13 @@
 }
 
 .btn--shopping,
-.btn--calendar {
+.btn--calendar,
+.btn--delete_recipe {
   margin-left: 1.8rem;
+}
+
+.del-icon {
+  font-size: 2rem;
 }
 
 .btn--tiny {
@@ -408,6 +413,10 @@ header .icons span:last-child {
   z-index: -1;
   border-radius: 50%;
   transform: translate(-50%, -50%);
+}
+
+.days li.clicked::before {
+  background: #f2f2f2;
 }
 
 .days li:hover::before {

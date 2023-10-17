@@ -1,7 +1,7 @@
 // import { async } from 'regenerator-runtime';
 import { API_URL, KEY } from './config';
 // import { getJSON, sendJSON } from './helpers';
-import { AJAX } from './helpers';
+import { AJAX, AJAXdelete } from './helpers';
 import { RES_PER_PAGE } from './config';
 import 'regenerator-runtime/runtime.js';
 
@@ -94,7 +94,7 @@ export const updateServings = function (newServings) {
   state.recipe.totalCalories =
     (state.recipe.totalCalories * newServings) / state.recipe.servings;
 
-  console.log(state.recipe.calories);
+  // console.log(state.recipe.calories);
   state.recipe.servings = newServings;
 };
 
@@ -104,8 +104,8 @@ const persistShoppingList = function () {
 
 export const addIngredientsToShoppingList = function () {
   // Add Ingredients to Shopping List
-  console.log(state.shoppingList);
-  console.log(state.recipe);
+  // console.log(state.shoppingList);
+  // console.log(state.recipe);
   if (state.shoppingList.length > 0)
     state.recipe.ingredients.forEach(newIng => {
       const sameIng = state.shoppingList.find(
@@ -122,7 +122,7 @@ export const addIngredientsToShoppingList = function () {
     const copy = structuredClone(state);
     state.shoppingList.push(...copy.recipe.ingredients);
   }
-  console.log(state.shoppingList);
+  // console.log(state.shoppingList);
   persistShoppingList();
 };
 
@@ -131,7 +131,7 @@ export const deleteIngFromShoppingList = function (ingDescription) {
     ing => ing.description === ingDescription
   );
   state.shoppingList.splice(index, 1);
-  console.log(state.shoppingList);
+  // console.log(state.shoppingList);
   persistShoppingList();
 };
 
@@ -158,6 +158,7 @@ export const addBookmark = function (recipe) {
 
 export const deleteBookmark = function (id) {
   const index = state.bookmarks.findIndex(el => el.id === id);
+  if (index === -1) return;
   state.bookmarks.splice(index, 1);
 
   //Mark current recipe as NOT bokkmarked
@@ -186,7 +187,7 @@ init();
 
 export const uploadRecipe = async function (newRecipe) {
   try {
-    console.log(newRecipe);
+    // console.log(newRecipe);
     const quantities = Object.entries(newRecipe).filter(entry =>
       entry[0].includes('quantity')
     );
@@ -198,13 +199,25 @@ export const uploadRecipe = async function (newRecipe) {
     );
 
     const ingredients = descriptions.map((desc, i) => {
-      const description = desc[1][0].toUpperCase() + desc[1].slice(1);
-      const unit = units[i][1];
+      const description =
+        desc[1][0].toUpperCase() + desc[1].slice(1).toLowerCase();
+      const unit = units[i][1].toLowerCase();
       const quantity = quantities[i][1] ? +quantities[i][1] : null;
       return { quantity, unit, description };
     });
 
-    console.log(ingredients);
+    const ingredientsNoDuplicate = ingredients.reduce((acc, arg) => {
+      const indexOfDuplicate = acc.findIndex(
+        el => el.description === arg.description && el.unit === arg.unit
+      );
+      if (indexOfDuplicate !== -1) {
+        const newAcc = [...acc];
+        newAcc.at(indexOfDuplicate).quantity = Number(
+          (acc.at(indexOfDuplicate).quantity + arg.quantity).toFixed(3)
+        );
+        return newAcc;
+      } else return [...acc, { ...arg }];
+    }, []);
 
     const recipe = {
       title: newRecipe.title,
@@ -213,7 +226,7 @@ export const uploadRecipe = async function (newRecipe) {
       publisher: newRecipe.publisher,
       cooking_time: newRecipe.cookingTime,
       servings: newRecipe.servings,
-      ingredients,
+      ingredients: ingredientsNoDuplicate,
     };
 
     const data = await AJAX(`${API_URL}?key=${KEY}`, recipe);
@@ -232,7 +245,7 @@ export const fetchAllFullRecipes = async function () {
       resultsID.map(id => AJAX(`${API_URL}${id}?key=${KEY}`))
     );
     state.search.results = fetchResults.map(rec => createRecipeObject(rec));
-    console.log(state.search.results);
+    // console.log(state.search.results);
   } catch (err) {
     throw err;
   }
@@ -240,15 +253,14 @@ export const fetchAllFullRecipes = async function () {
 
 export const sortResults = function (sortType, maxMin) {
   if (sortType === 'numberOfIngredients')
-    return console.log(
-      maxMin === 'FromMaxToMin'
-        ? state.search.results.sort(
-            (a, b) => b.ingredients.length - a.ingredients.length
-          )
-        : state.search.results.sort(
-            (a, b) => a.ingredients.length - b.ingredients.length
-          )
-    );
+    return maxMin === 'FromMaxToMin'
+      ? state.search.results.sort(
+          (a, b) => b.ingredients.length - a.ingredients.length
+        )
+      : state.search.results.sort(
+          (a, b) => a.ingredients.length - b.ingredients.length
+        );
+
   if (sortType === 'duration')
     return maxMin === 'FromMaxToMin'
       ? state.search.results.sort((a, b) => b.cookingTime - a.cookingTime)
@@ -265,8 +277,8 @@ export const addMealtoCalendar = function (day, month, year) {
   //prettier-ignore
   state.meals.push({id, publisher, title, image, day, month, year, ...key, verifyNumb,});
 
-  console.log(state.recipe);
-  console.log(state.meals.at(-1));
+  // console.log(state.recipe);
+  // console.log(state.meals.at(-1));
   persistMeals();
 };
 
@@ -281,10 +293,10 @@ const persistMeals = function () {
 };
 
 export const deleteMeal = function (verifyNumb) {
-  console.log(verifyNumb);
-  console.log(state.meals);
+  // console.log(verifyNumb);
+  // console.log(state.meals);
   const index = state.meals.findIndex(meal => meal.verifyNumb === +verifyNumb);
-  console.log(index);
+  // console.log(index);
   state.meals.splice(index, 1);
   persistMeals();
 };
@@ -296,11 +308,11 @@ export const clearMealsFromCalendar = function () {
 
 export const getCalories = async function (recipe) {
   try {
-    console.log(recipe);
+    // console.log(recipe);
     const ingredients = recipe.ingredients.map(ing =>
       [ing.quantity, ing.unit, ing.description].join(' ')
     );
-    console.log(ingredients);
+    // console.log(ingredients);
 
     const uploadData = {
       title: recipe.title,
@@ -308,27 +320,37 @@ export const getCalories = async function (recipe) {
       servings: 1,
     };
 
-    console.log(uploadData);
+    // console.log(uploadData);
 
     const data = await AJAX(
       `https://api.spoonacular.com/recipes/analyze?includeNutrition=true&apiKey=db254b5cd61744d39a2deebd9c361444`,
       uploadData
     );
-    //db254b5cd61744d39a2deebd9c361444
-    //f45945aabcb444e790b29400a4557029
-    console.log(data);
+
+    // console.log(data);
 
     const calories = data.nutrition.ingredients.map((ing, i) => {
       const index = ing.nutrients.findIndex(nut => nut.name === 'Calories');
       return ing.nutrients.at(index).amount;
     });
 
-    console.log(calories);
+    // console.log(calories);
 
     state.recipe.calories = calories;
     state.recipe.totalCalories = calories.reduce((a, b) => a + b, 0).toFixed();
   } catch (err) {
     //Temp error handling
+    console.error(`💥 ${err} 💥`);
+    throw err;
+  }
+};
+
+export const deleteUploadedRecipe = async function () {
+  try {
+    await AJAXdelete(`${API_URL}${state.recipe.id}?key=${KEY}`);
+    deleteBookmark(state.recipe.id);
+    state.recipe = {};
+  } catch (err) {
     console.error(`💥 ${err} 💥`);
     throw err;
   }

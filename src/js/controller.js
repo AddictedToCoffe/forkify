@@ -128,7 +128,7 @@ const controlBookmarks = function () {
 
 const controlDeleteAllBookmarks = function () {
   model.clearBookmarks();
-  recipeView.update(model.state.recipe);
+  model.state.recipe.ingredients && recipeView.update(model.state.recipe);
   bookmarksView.render(model.state.bookmarks);
 };
 
@@ -164,16 +164,19 @@ const controlAddRecipe = async function (newRecipe) {
 
     //Upload new recipe
     await model.uploadRecipe(newRecipe);
-    console.log(model.state.recipe);
+    // console.log(model.state.recipe);
+
+    //Render bookmark view
+    bookmarksView.render(model.state.bookmarks);
+
+    //Get calories
+    await model.getCalories(model.state.recipe);
 
     //Render recipe
     recipeView.render(model.state.recipe);
 
     // Succes message
     addRecipeView.renderMessage();
-
-    //Render bookmark view
-    bookmarksView.render(model.state.bookmarks);
 
     //Change ID in URL
     window.history.pushState(null, '', `#${model.state.recipe.id}`);
@@ -211,6 +214,12 @@ const controlDeleteAllMeals = function () {
   calendarView.render(model.state.meals);
 };
 
+const controlDeleteUploadedRecipe = async function () {
+  await model.deleteUploadedRecipe();
+  bookmarksView.render(model.state.bookmarks);
+  location.href = '/';
+};
+
 const init = function () {
   bookmarksView.addHandlerRender(controlBookmarks);
   bookmarksView.addHandlerDeleteAllBookmarks(controlDeleteAllBookmarks);
@@ -222,6 +231,7 @@ const init = function () {
   recipeView.addHandlerUpdateServings(constrolServings);
   recipeView.addHandlerAddBookmark(controlAddBookmark);
   recipeView.addHandlerAddIngToShoppingList(controlAddIngToShoppingList);
+  recipeView.addHandlerDeleteUploadedRecipe(controlDeleteUploadedRecipe);
   searchView.addHandlerSearch(controlSearchResults);
   recipeView.addHandlerAddMealToCalendar(controlAddMeal);
   paginationView.addHandlerClick(controlPagination);

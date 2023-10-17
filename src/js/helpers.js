@@ -32,6 +32,56 @@ export const AJAX = async function (url, uploadData = undefined) {
   }
 };
 
+export const AJAXdelete = async function (url) {
+  try {
+    fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  } catch (err) {
+    throw err;
+  }
+};
+
+// async function imageValidation(url, uploadData) {
+//   try {
+//     console.log(uploadData);
+//     console.log(uploadData.image_url);
+//     const res = await fetch(uploadData.image_url, { method: 'HEAD' });
+//     console.log(res);
+//     const data = await res.blob();
+//     console.log(data);
+//     const isImage = data.type.startsWith('image/');
+//     console.log(isImage);
+
+//     const uploadRecipe = fetch(url, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: isImage
+//         ? JSON.stringify(uploadData)
+//         : JSON.stringify({
+//             ...uploadData,
+//             image_url: 'https://img.lovepik.com/element/40021/7866.png_300.png',
+//           }),
+//     });
+//     return uploadRecipe;
+//   } catch (err) {
+//     return fetch(url, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({
+//         ...uploadData,
+//         image_url: 'https://img.lovepik.com/element/40021/7866.png_300.png',
+//       }),
+//     });
+//   }
+// }
 /*
 export const getJSON = async function (url) {
   try {

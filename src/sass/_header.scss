@@ -122,6 +122,8 @@
   &__list {
     list-style: none;
     // margin-left: 10px;
+    overflow: scroll;
+    max-height: 70vh;
   }
 
   &__field {
@@ -178,4 +180,10 @@
   }
 }
 
+.bookmarks__list::-webkit-scrollbar {
+  display: none;
+}
 
+.shopping__list::-webkit-scrollbar {
+  display: none;
+}
