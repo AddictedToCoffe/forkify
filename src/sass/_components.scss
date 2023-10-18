@@ -333,8 +333,8 @@
 .wrapper header {
   display: flex;
   align-items: center;
-  padding: 25px 30px 10px;
-  justify-content: space-between;
+  padding: 15px 20px 0px;
+  flex-direction: column;
 }
 
 header .current-date {
@@ -363,8 +363,14 @@ header .icons span:last-child {
   margin-right: -10px;
 }
 
+.calendar-desc {
+  color: $color-primary;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
 .calendar {
-  padding: 20px;
+  padding: 15px;
 }
 
 .calendar ul {
@@ -425,4 +431,10 @@ header .icons span:last-child {
 
 .days li.active::before {
   background: #ff7c02b5;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

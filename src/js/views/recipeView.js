@@ -10,12 +10,14 @@ class RecipeView extends View {
   _parentElement = document.querySelector('.recipe');
   _errorMessage = 'We could not find that recipe. Please try another one!';
   _calendarDays = document.querySelector('.days');
+  _shoppingToast = document.querySelector('.shopping-toast');
   _message = '';
+  _timerId = '';
 
-  // constructor() {
-  //   super();
-  //   this.bindFunction =
-  // }
+  constructor() {
+    super();
+    this._fastCloseToastHandler();
+  }
 
   addHandlerRender(handler) {
     ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
@@ -39,10 +41,16 @@ class RecipeView extends View {
   }
 
   addHandlerAddIngToShoppingList(handler) {
-    this._parentElement.addEventListener('click', function (e) {
+    this._parentElement.addEventListener('click', e => {
       const btn = e.target.closest('.btn--shopping');
       if (!btn) return;
       handler();
+      clearTimeout(this._timerId);
+      this._shoppingToast.classList.remove('hidden');
+      this._timerId = setTimeout(
+        () => this._shoppingToast.classList.add('hidden'),
+        2000
+      );
     });
   }
 
@@ -199,6 +207,28 @@ class RecipeView extends View {
 </div>
 </li>
 `;
+  }
+
+  _fastCloseToastHandler() {
+    document.addEventListener(
+      'click',
+      () => {
+        if (!this._shoppingToast.classList.contains('hidden'))
+          this._shoppingToast.classList.add('hidden');
+      },
+      true
+    );
+    document.addEventListener(
+      'keydown',
+      e => {
+        if (
+          e.key === 'Escape' &&
+          !this._shoppingToast.classList.contains('hidden')
+        )
+          this._shoppingToast.classList.add('hidden');
+      },
+      true
+    );
   }
 }
 

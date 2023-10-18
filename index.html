@@ -26,12 +26,17 @@
     <div class="daily-meals hidden">
       <div class="wrapper">
         <header>
-          <p class="current-date"></p>
-          <div class="icons">
-            <span id="prev" class="material-symbols-rounded">chevron_left</span>
-            <span id="next" class="material-symbols-rounded"
-              >chevron_right</span
-            >
+          <p class="calendar-desc"></p>
+          <div class="calendar-header">
+            <p class="current-date"></p>
+            <div class="icons">
+              <span id="prev" class="material-symbols-rounded"
+                >chevron_left</span
+              >
+              <span id="next" class="material-symbols-rounded"
+                >chevron_right</span
+              >
+            </div>
           </div>
         </header>
         <div class="calendar">
@@ -49,13 +54,16 @@
       </div>
       <div class="list-of-meals">
         <header>
-          <p>Planned meals on this day:</p>
+          <p class="meals-on-day"></p>
         </header>
         <div class="meals">No planned meals on this day.</div>
         <h2 class="clear-meals">Clear ALL meals from calendar🗑️</h2>
       </div>
     </div>
 
+    <div class="shopping-toast hidden">
+      Ingredients added to your shopping list !
+    </div>
     <!-- <div class="overlay"></div> -->
 
     <div class="container">

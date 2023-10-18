@@ -13,9 +13,12 @@ class CalendarView extends View {
   _overlay = document.querySelector('.overlay');
   _deleteAll = document.querySelector('.clear-meals');
   _days = this._daysTag.getElementsByTagName('li');
+  _calendarDesc = document.querySelector('.calendar-desc');
+  _mealsOnDay = document.querySelector('.meals-on-day');
   _message = '';
   _errorMessage =
     'No planned meals on this day. Find nice recipe and add to chosen day';
+  _isAddingRecipe = false;
 
   _date = new Date();
   _currYear = this._date.getFullYear();
@@ -114,6 +117,8 @@ class CalendarView extends View {
         }
         this._renderCalendar();
         this.renderMessage('Choose day');
+        if (!this._isAddingRecipe)
+          this._calendarDesc.textContent = `YOUR CALENDAR ${this._currYear}`;
       })
     );
   }
@@ -137,6 +142,15 @@ class CalendarView extends View {
     this._date = new Date();
     this._currYear = this._date.getFullYear();
     this._currMonth = this._date.getMonth();
+
+    const currentDay = this._date.getDate();
+    const currentMonth = this._currMonth;
+    const currentYear = this._currYear;
+
+    this._mealsOnDay.textContent = `Planned meals on day ${currentDay}.${
+      currentMonth + 1 < 10 ? `0${currentMonth + 1}` : `${currentMonth + 1}`
+    }.${currentYear}:`;
+
     this._renderCalendar();
     this._overlay.classList.remove('hidden');
     this._calendar.classList.remove('hidden');
@@ -148,6 +162,8 @@ class CalendarView extends View {
     );
     this._calendarButton.addEventListener('click', () => {
       this._openCalender();
+      this._isAddingRecipe = false;
+      this._calendarDesc.textContent = `YOUR CALENDAR ${this._currYear}`;
       handler(this._date.getDate(), this._currMonth, this._currYear);
     });
   }
@@ -169,6 +185,8 @@ class CalendarView extends View {
 
   _recipeAddMealButtonHandler(handler) {
     this._openCalender();
+    this._calendarDesc.textContent = 'CLICK ON DAY TO ADD MEAL TO IT';
+    this._isAddingRecipe = true;
     handler(this._date.getDate(), this._currMonth, this._currYear, false);
     // const verifyNumb = Date.parse(new Date());
     // console.log(verifyNumb);
@@ -215,6 +233,9 @@ class CalendarView extends View {
     const currentMonth = this._currMonth;
     const currentYear = this._currYear;
     // const x = verifyNumb ? verifyNumb : '';
+    this._mealsOnDay.textContent = `Planned meals on day ${currentDay}.${
+      currentMonth + 1 < 10 ? `0${currentMonth + 1}` : `${currentMonth + 1}`
+    }.${currentYear}:`;
     handler(currentDay, currentMonth, currentYear);
   };
 }
